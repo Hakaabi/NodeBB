@@ -10,13 +10,11 @@ const DEFAULT_BATCH_SIZE = 100;
 
 const sleep = util.promisify(setTimeout);
 
+// I will reduce the complexity of the code by making helper functions outside the main function
+// where the errors show
 
-//I will reduce the complixity of the code by making helper functions outside the mian function
-//where the errors show
-
-//helper functions:
-
-//fixing error 1: 
+// helper functions:
+// fixing error 1:
 function processIsFunction(process) {
 	if (typeof process !== 'function') {
 		throw new Error('[[error:process-not-a-function]]');
