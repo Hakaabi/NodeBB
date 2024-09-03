@@ -10,12 +10,22 @@ const DEFAULT_BATCH_SIZE = 100;
 
 const sleep = util.promisify(setTimeout);
 
-exports.processSortedSet = async function (setKey, process, options) {
-	options = options || {};
 
+//I will reduce the complixity of the code by making helper functions outside the mian function
+//where the errors show
+
+//helper functions:
+
+//fixing error 1: 
+function processIsFunction(process) {
 	if (typeof process !== 'function') {
 		throw new Error('[[error:process-not-a-function]]');
 	}
+}
+exports.processSortedSet = async function (setKey, process, options) {
+	options = options || {};
+
+	processIsFunction(process);
 
 	// Progress bar handling (upgrade scripts)
 	if (options.progress) {
