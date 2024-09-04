@@ -25,6 +25,13 @@ describe('batch', () => {
 		);
 	});
 	
+	it('should throw error if process is not a function in processArray', async () => {
+		await assert.rejects(
+			batch.processArray(scores, 'notAFunction'),
+			new Error('[[error:process-not-a-function]]')
+		);
+	});
+	
 	it('should process sorted set with callbacks', (done) => {
 		let total = 0;
 		batch.processSortedSet('processMe', (items, next) => {
