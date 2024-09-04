@@ -2,9 +2,7 @@
 
 const async = require('async');
 const assert = require('assert');
-
 const db = require('./mocks/databasemock');
-
 const batch = require('../src/batch');
 
 describe('batch', () => {
@@ -24,44 +22,40 @@ describe('batch', () => {
 			new Error('[[error:process-not-a-function]]')
 		);
 	});
-	
+
 	it('should throw error if process is not a function in processArray', async () => {
 		await assert.rejects(
 			batch.processArray(scores, 'notAFunction'),
 			new Error('[[error:process-not-a-function]]')
 		);
 	});
-	
+
 	it('should correctly set options.progress.total in processSortedSet', async () => {
-		
 		const originalSortedSetCard = db.sortedSetCard;
 		db.sortedSetCard = () => Promise.resolve(100);
-	
+
 		const options = { progress: {} };
 		await batch.processSortedSet('processMe', () => {}, options);
-	
+
 		assert.strictEqual(options.progress.total, 100);
-	
-		
+
 		db.sortedSetCard = originalSortedSetCard;
 	});
+
 	it('should use db.processSortedSet if conditions are met in processSortedSet', async () => {
-		
 		const originalProcessSortedSet = db.processSortedSet;
 		db.processSortedSet = () => Promise.resolve();
-	
+
 		await batch.processSortedSet('processMe', () => {}, {
 			doneIf: () => false,
-			alwaysStartAt: 0
+			alwaysStartAt: 0,
 		});
-	
-		
+
 		assert(db.processSortedSet.calledOnce);
-	
-		
+
 		db.processSortedSet = originalProcessSortedSet;
 	});
-	
+
 	it('should process sorted set with callbacks', (done) => {
 		let total = 0;
 		batch.processSortedSet('processMe', (items, next) => {
