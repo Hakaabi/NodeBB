@@ -18,6 +18,13 @@ describe('batch', () => {
 		db.sortedSetAdd('processMe', scores, values, done);
 	});
 
+	it('should throw error if process is not a function in processSortedSet', async () => {
+		await assert.rejects(
+			batch.processSortedSet('processMe', 'notAFunction'),
+			new Error('[[error:process-not-a-function]]')
+		);
+	});
+	
 	it('should process sorted set with callbacks', (done) => {
 		let total = 0;
 		batch.processSortedSet('processMe', (items, next) => {
