@@ -32,6 +32,30 @@ describe('batch', () => {
 		);
 	});
 
+	it('should correctly set options.progress.total if options.progress is defined', async () => {
+		const originalSortedSetCard = db.sortedSetCard;
+		db.sortedSetCard = () => Promise.resolve(100);
+
+		const options = { progress: {} };
+		await batch.processSortedSet('testSet', () => {}, options);
+
+		assert.strictEqual(options.progress.total, 100);
+
+		db.sortedSetCard = originalSortedSetCard;
+	});
+
+	it('should use db.processSortedSet if conditions are met', async () => {
+		const originalProcessSortedSet = db.processSortedSet;
+		db.processSortedSet = () => Promise.resolve('done');
+
+		const options = { doneIf: null, alwaysStartAt: undefined };
+		const result = await batch.processSortedSet('testSet', () => {}, options);
+
+		assert.strictEqual(result, 'done');
+
+		db.processSortedSet = originalProcessSortedSet;
+	});
+
 	it('should process sorted set with callbacks', (done) => {
 		let total = 0;
 		batch.processSortedSet('processMe', (items, next) => {
