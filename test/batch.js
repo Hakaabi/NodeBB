@@ -45,6 +45,22 @@ describe('batch', () => {
 		
 		db.sortedSetCard = originalSortedSetCard;
 	});
+	it('should use db.processSortedSet if conditions are met in processSortedSet', async () => {
+		
+		const originalProcessSortedSet = db.processSortedSet;
+		db.processSortedSet = () => Promise.resolve();
+	
+		await batch.processSortedSet('processMe', () => {}, {
+			doneIf: () => false,
+			alwaysStartAt: 0
+		});
+	
+		
+		assert(db.processSortedSet.calledOnce);
+	
+		
+		db.processSortedSet = originalProcessSortedSet;
+	});
 	
 	it('should process sorted set with callbacks', (done) => {
 		let total = 0;
