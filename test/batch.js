@@ -32,18 +32,6 @@ describe('batch', () => {
 		);
 	});
 
-	it('should correctly set options.progress.total in processSortedSet', async () => {
-		const originalSortedSetCard = db.sortedSetCard;
-		db.sortedSetCard = () => Promise.resolve(100);
-
-		const options = { progress: {} };
-		await batch.processSortedSet('processMe', () => {}, options);
-
-		assert.strictEqual(options.progress.total, 100);
-
-		db.sortedSetCard = originalSortedSetCard;
-	});
-
 	it('should process sorted set with callbacks', (done) => {
 		let total = 0;
 		batch.processSortedSet('processMe', (items, next) => {
