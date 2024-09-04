@@ -20,6 +20,8 @@ function processIsFunction(process) {
 		throw new Error('[[error:process-not-a-function]]');
 	}
 }
+console.log('Hakaabi: Refactored code is running!');
+
 exports.processSortedSet = async function (setKey, process, options) {
 	options = options || {};
 
@@ -76,6 +78,7 @@ exports.processSortedSet = async function (setKey, process, options) {
 		stop = start + options.batch - 1;
 	}
 };
+console.log('Hakaabi: Refactored code stopped running!');
 
 exports.processArray = async function (array, process, options) {
 	options = options || {};
